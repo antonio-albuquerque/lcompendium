@@ -1,0 +1,55 @@
+.upload-page {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.upload-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-forest);
+  margin-bottom: 0.4rem;
+}
+
+.upload-subheading {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.upload-section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.upload-section-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.upload-error {
+  background-color: #fdf2f0;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  color: var(--color-danger);
+  font-size: 0.9rem;
+}
+
+.upload-submit {
+  align-self: flex-start;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+}

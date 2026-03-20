@@ -1,0 +1,71 @@
+.compendium-page {
+  padding-bottom: 2rem;
+}
+
+.compendium-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-forest);
+  margin-bottom: 1.5rem;
+}
+
+.compendium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.compendium-status {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.compendium-error {
+  color: var(--color-danger);
+}
+
+.compendium-empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--color-cream);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-border);
+}
+
+.compendium-empty-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.compendium-empty-text {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.compendium-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  min-width: 100px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .compendium-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}
