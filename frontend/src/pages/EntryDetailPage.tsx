@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchEntry, deleteEntry } from "../api/entries";
+import Spinner from "../components/Spinner";
 import "./EntryDetailPage.css";
 
 function formatDate(dateString: string): string {
@@ -51,7 +52,7 @@ function EntryDetailPage() {
   if (isLoading) {
     return (
       <div className="detail-page">
-        <div className="detail-status">Loading entry...</div>
+        <Spinner label="Loading entry…" />
       </div>
     );
   }

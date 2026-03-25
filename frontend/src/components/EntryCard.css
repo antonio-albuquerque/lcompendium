@@ -1,3 +1,14 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .entry-card {
   display: block;
   background-color: #fff;
@@ -8,6 +19,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
   color: inherit;
+  animation: fadeInUp 0.4s var(--transition-standard) both;
 }
 
 .entry-card:hover {
@@ -37,9 +49,12 @@
 
 .entry-card-body {
   padding: 0.85rem 1rem;
+  border-top: 2px solid var(--color-sand);
 }
 
 .entry-card-title {
+  font-family: var(--font-heading);
+  font-style: italic;
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--color-text);

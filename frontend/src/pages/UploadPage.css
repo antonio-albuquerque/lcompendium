@@ -8,6 +8,7 @@
   font-weight: 700;
   color: var(--color-forest);
   margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
 }
 
 .upload-subheading {
@@ -29,6 +30,7 @@
 }
 
 .upload-section-title {
+  font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--color-text);
@@ -52,4 +54,19 @@
   align-self: flex-start;
   padding: 0.75rem 2rem;
   font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .upload-page {
+    padding: 0 0.5rem;
+  }
+
+  .upload-form {
+    gap: 1.5rem;
+  }
+
+  .upload-submit {
+    align-self: stretch;
+    width: 100%;
+  }
 }

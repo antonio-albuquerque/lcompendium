@@ -10,6 +10,10 @@
   margin-bottom: 1.5rem;
 }
 
+.detail-back::before {
+  content: "← ";
+}
+
 .detail-back:hover {
   color: var(--color-forest-light);
 }
@@ -51,10 +55,22 @@
 
 .detail-info {
   padding: 1.5rem 2rem 2rem;
+  position: relative;
+}
+
+.detail-info::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background-color: var(--color-sand);
+  margin-bottom: 1.25rem;
 }
 
 .detail-species {
-  font-size: 1.6rem;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--color-forest);
   margin-bottom: 1rem;
@@ -63,7 +79,7 @@
 
 .detail-description {
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--color-text);
   margin-bottom: 1.5rem;
   white-space: pre-line;
@@ -85,6 +101,7 @@
 }
 
 .detail-meta-label {
+  font-family: var(--font-heading);
   font-size: 0.82rem;
   font-weight: 600;
   text-transform: uppercase;

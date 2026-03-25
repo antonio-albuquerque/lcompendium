@@ -3,9 +3,16 @@
 }
 
 .compendium-heading {
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--color-forest);
+  margin-bottom: 0.75rem;
+}
+
+.compendium-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-sand), var(--color-border), transparent);
   margin-bottom: 1.5rem;
 }
 
@@ -28,10 +35,22 @@
 
 .compendium-empty {
   text-align: center;
-  padding: 4rem 1rem;
+  padding: 4rem 2rem;
   background-color: var(--color-cream);
   border-radius: var(--radius-lg);
   border: 1px dashed var(--color-border);
+}
+
+.compendium-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.compendium-empty-cta {
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--color-forest);
 }
 
 .compendium-empty-title {

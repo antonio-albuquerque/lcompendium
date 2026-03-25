@@ -12,6 +12,23 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}
+
+.layout-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-sand), transparent);
 }
 
 .header-content {
@@ -24,6 +41,7 @@
 }
 
 .header-title {
+  font-family: var(--font-heading);
   font-size: 1.4rem;
   font-weight: 700;
   color: #fff;

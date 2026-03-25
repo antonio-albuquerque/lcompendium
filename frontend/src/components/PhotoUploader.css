@@ -62,6 +62,13 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  transition: color var(--transition-standard), transform var(--transition-standard), border-color var(--transition-standard);
+}
+
+.upload-zone:hover .upload-icon {
+  color: var(--color-forest);
+  border-color: var(--color-forest);
+  transform: scale(1.08);
 }
 
 .upload-text {

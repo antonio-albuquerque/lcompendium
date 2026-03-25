@@ -1,0 +1,17 @@
+.location-picker-coords {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.location-picker-value {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.location-picker-error {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}

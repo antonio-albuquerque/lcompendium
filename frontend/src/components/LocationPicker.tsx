@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import "./LocationPicker.css";
 
 interface LocationPickerProps {
   onChange: (coords: { latitude: number; longitude: number } | null) => void;
@@ -64,20 +65,8 @@ function LocationPicker({ onChange }: LocationPickerProps) {
   return (
     <div className="location-picker">
       {coords ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontSize: "0.9rem",
-              color: "var(--color-text-muted)",
-            }}
-          >
+        <div className="location-picker-coords">
+          <span className="location-picker-value">
             Location: {coords.latitude.toFixed(5)},{" "}
             {coords.longitude.toFixed(5)}
           </span>
@@ -96,13 +85,7 @@ function LocationPicker({ onChange }: LocationPickerProps) {
         </button>
       )}
       {error && (
-        <p
-          style={{
-            color: "var(--color-danger)",
-            fontSize: "0.85rem",
-            marginTop: "0.5rem",
-          }}
-        >
+        <p className="location-picker-error">
           {error}
         </p>
       )}
