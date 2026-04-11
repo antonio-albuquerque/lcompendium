@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import type { DragEvent, ChangeEvent } from "react";
+import { useLanguage } from "../i18n/LanguageProvider";
 import "./PhotoUploader.css";
 
 interface PhotoUploaderProps {
@@ -7,6 +8,7 @@ interface PhotoUploaderProps {
 }
 
 function PhotoUploader({ onChange }: PhotoUploaderProps) {
+  const { t } = useLanguage();
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -92,14 +94,18 @@ function PhotoUploader({ onChange }: PhotoUploaderProps) {
         }}
       >
         {preview ? (
-          <img src={preview} alt="Preview" className="upload-preview" />
+          <img
+            src={preview}
+            alt={t("photoUploader.previewAlt")}
+            className="upload-preview"
+          />
         ) : (
           <div className="upload-placeholder">
             <span className="upload-icon">+</span>
             <span className="upload-text">
-              Drag & drop a photo here, or click to select
+              {t("photoUploader.dragText")}
             </span>
-            <span className="upload-hint">Accepts image files</span>
+            <span className="upload-hint">{t("photoUploader.hint")}</span>
           </div>
         )}
         <input
@@ -108,12 +114,12 @@ function PhotoUploader({ onChange }: PhotoUploaderProps) {
           accept="image/*"
           onChange={handleInputChange}
           className="upload-input"
-          aria-label="Upload photo"
+          aria-label={t("photoUploader.ariaLabel")}
         />
       </div>
       {preview && (
         <button type="button" className="btn-secondary" onClick={handleClear}>
-          Remove photo
+          {t("photoUploader.remove")}
         </button>
       )}
     </div>

@@ -4,9 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEntry } from "../api/entries";
 import PhotoUploader from "../components/PhotoUploader";
 import LocationPicker from "../components/LocationPicker";
+import { useLanguage } from "../i18n/LanguageProvider";
 import "./UploadPage.css";
 
 function UploadPage() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
@@ -50,32 +52,36 @@ function UploadPage() {
 
   return (
     <div className="upload-page">
-      <h1 className="upload-heading">Upload a Photo</h1>
-      <p className="upload-subheading">
-        Take or upload a photo and we will identify the species for you.
-      </p>
+      <span className="upload-eyebrow">{t("upload.eyebrow")}</span>
+      <h1 className="upload-heading">
+        {t("upload.headingPart1")} <em>{t("upload.headingEm")}</em>{" "}
+        {t("upload.headingPart2")}
+      </h1>
+      <p className="upload-subheading">{t("upload.subheading")}</p>
 
       <form className="upload-form" onSubmit={handleSubmit}>
         <section className="upload-section">
-          <h2 className="upload-section-title">Photo</h2>
+          <h2 className="upload-section-title">{t("upload.photoSection")}</h2>
           <PhotoUploader onChange={handleFileChange} />
         </section>
 
         <section className="upload-section">
-          <h2 className="upload-section-title">Location (optional)</h2>
-          <p className="upload-section-hint">
-            Adding your location helps with species identification.
-          </p>
+          <h2 className="upload-section-title">
+            {t("upload.locationSection")}
+          </h2>
+          <p className="upload-section-hint">{t("upload.locationHint")}</p>
           <LocationPicker onChange={handleLocationChange} />
         </section>
 
         {mutation.isError && (
           <div className="upload-error">
             <p>
-              Upload failed:{" "}
-              {mutation.error instanceof Error
-                ? mutation.error.message
-                : "An unknown error occurred."}
+              {t("upload.errorLabel", {
+                message:
+                  mutation.error instanceof Error
+                    ? mutation.error.message
+                    : t("common.unknownError"),
+              })}
             </p>
           </div>
         )}
@@ -85,7 +91,9 @@ function UploadPage() {
           className="btn-primary upload-submit"
           disabled={!file || mutation.isPending}
         >
-          {mutation.isPending ? "Identifying species..." : "Upload & Identify"}
+          {mutation.isPending
+            ? t("upload.identifying")
+            : t("upload.submit")}
         </button>
       </form>
     </div>

@@ -3,11 +3,13 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchEntry, deleteEntry } from "../api/entries";
 import Spinner from "../components/Spinner";
+import { useLanguage } from "../i18n/LanguageProvider";
+import type { Language } from "../i18n/translations";
 import "./EntryDetailPage.css";
 
-function formatDate(dateString: string): string {
+function formatDate(dateString: string, language: Language): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(language, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -17,6 +19,7 @@ function formatDate(dateString: string): string {
 }
 
 function EntryDetailPage() {
+  const { t, language } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -41,18 +44,16 @@ function EntryDetailPage() {
   });
 
   const handleDelete = useCallback(() => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this entry? This action cannot be undone.",
-    );
+    const confirmed = window.confirm(t("detail.deleteConfirm"));
     if (confirmed) {
       deleteMutation.mutate();
     }
-  }, [deleteMutation]);
+  }, [deleteMutation, t]);
 
   if (isLoading) {
     return (
       <div className="detail-page">
-        <Spinner label="Loading entry…" />
+        <Spinner label={t("detail.loading")} />
       </div>
     );
   }
@@ -61,10 +62,10 @@ function EntryDetailPage() {
     return (
       <div className="detail-page">
         <div className="detail-status detail-error">
-          Failed to load entry: {(error as Error).message}
+          {t("detail.loadError", { message: (error as Error).message })}
         </div>
         <Link to="/" className="detail-back">
-          Back to browse
+          {t("detail.back")}
         </Link>
       </div>
     );
@@ -73,9 +74,9 @@ function EntryDetailPage() {
   if (!entry) {
     return (
       <div className="detail-page">
-        <div className="detail-status">Entry not found.</div>
+        <div className="detail-status">{t("detail.notFound")}</div>
         <Link to="/" className="detail-back">
-          Back to browse
+          {t("detail.back")}
         </Link>
       </div>
     );
@@ -84,7 +85,7 @@ function EntryDetailPage() {
   return (
     <div className="detail-page">
       <Link to="/" className="detail-back">
-        Back to browse
+        {t("detail.back")}
       </Link>
 
       <div className="detail-content">
@@ -97,6 +98,7 @@ function EntryDetailPage() {
         </div>
 
         <div className="detail-info">
+          <span className="detail-eyebrow">{t("detail.eyebrow")}</span>
           <h1 className="detail-species">{entry.species_name}</h1>
 
           <p className="detail-description">{entry.description}</p>
@@ -104,7 +106,9 @@ function EntryDetailPage() {
           <div className="detail-meta">
             {entry.latitude !== null && entry.longitude !== null && (
               <div className="detail-meta-item">
-                <span className="detail-meta-label">Location</span>
+                <span className="detail-meta-label">
+                  {t("detail.locationLabel")}
+                </span>
                 <span className="detail-meta-value">
                   {entry.latitude.toFixed(5)}, {entry.longitude.toFixed(5)}
                 </span>
@@ -112,9 +116,11 @@ function EntryDetailPage() {
             )}
 
             <div className="detail-meta-item">
-              <span className="detail-meta-label">Cataloged</span>
+              <span className="detail-meta-label">
+                {t("detail.catalogedLabel")}
+              </span>
               <time className="detail-meta-value" dateTime={entry.created_at}>
-                {formatDate(entry.created_at)}
+                {formatDate(entry.created_at, language)}
               </time>
             </div>
           </div>
@@ -126,16 +132,20 @@ function EntryDetailPage() {
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete Entry"}
+              {deleteMutation.isPending
+                ? t("detail.deleting")
+                : t("detail.delete")}
             </button>
           </div>
 
           {deleteMutation.isError && (
             <div className="detail-delete-error">
-              Failed to delete:{" "}
-              {deleteMutation.error instanceof Error
-                ? deleteMutation.error.message
-                : "Unknown error"}
+              {t("detail.deleteError", {
+                message:
+                  deleteMutation.error instanceof Error
+                    ? deleteMutation.error.message
+                    : t("common.unknownError"),
+              })}
             </div>
           )}
         </div>

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useLanguage } from "../i18n/LanguageProvider";
 import "./LocationPicker.css";
 
 interface LocationPickerProps {
@@ -6,6 +7,7 @@ interface LocationPickerProps {
 }
 
 function LocationPicker({ onChange }: LocationPickerProps) {
+  const { t } = useLanguage();
   const [coords, setCoords] = useState<{
     latitude: number;
     longitude: number;
@@ -15,7 +17,7 @@ function LocationPicker({ onChange }: LocationPickerProps) {
 
   const handleGetLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser.");
+      setError(t("locationPicker.unsupported"));
       return;
     }
 
@@ -36,16 +38,16 @@ function LocationPicker({ onChange }: LocationPickerProps) {
         setLoading(false);
         switch (err.code) {
           case err.PERMISSION_DENIED:
-            setError("Location access was denied.");
+            setError(t("locationPicker.denied"));
             break;
           case err.POSITION_UNAVAILABLE:
-            setError("Location information is unavailable.");
+            setError(t("locationPicker.unavailable"));
             break;
           case err.TIMEOUT:
-            setError("Location request timed out.");
+            setError(t("locationPicker.timeout"));
             break;
           default:
-            setError("An unknown error occurred.");
+            setError(t("locationPicker.unknown"));
         }
       },
       {
@@ -54,7 +56,7 @@ function LocationPicker({ onChange }: LocationPickerProps) {
         maximumAge: 60_000,
       },
     );
-  }, [onChange]);
+  }, [onChange, t]);
 
   const handleClear = useCallback(() => {
     setCoords(null);
@@ -67,11 +69,13 @@ function LocationPicker({ onChange }: LocationPickerProps) {
       {coords ? (
         <div className="location-picker-coords">
           <span className="location-picker-value">
-            Location: {coords.latitude.toFixed(5)},{" "}
-            {coords.longitude.toFixed(5)}
+            {t("locationPicker.label", {
+              lat: coords.latitude.toFixed(5),
+              lon: coords.longitude.toFixed(5),
+            })}
           </span>
           <button type="button" className="btn-secondary" onClick={handleClear}>
-            Clear location
+            {t("locationPicker.clear")}
           </button>
         </div>
       ) : (
@@ -81,14 +85,10 @@ function LocationPicker({ onChange }: LocationPickerProps) {
           onClick={handleGetLocation}
           disabled={loading}
         >
-          {loading ? "Getting location..." : "Use my location"}
+          {loading ? t("locationPicker.loading") : t("locationPicker.use")}
         </button>
       )}
-      {error && (
-        <p className="location-picker-error">
-          {error}
-        </p>
-      )}
+      {error && <p className="location-picker-error">{error}</p>}
     </div>
   );
 }

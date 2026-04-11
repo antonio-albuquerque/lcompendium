@@ -1,27 +1,68 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { useLanguage } from "../i18n/LanguageProvider";
+import { LANGUAGES, type Language } from "../i18n/translations";
 import "./Layout.css";
 
+const LANGUAGE_LABELS: Record<Language, string> = {
+  "en-US": "EN",
+  "pt-BR": "PT",
+};
+
 function Layout() {
+  const { t, language, setLanguage } = useLanguage();
+
   return (
     <div className="layout">
       <header className="layout-header">
-        <div className="header-content">
+        <div className="header-pill">
           <Link to="/" className="header-title">
-            L Compendium
+            <span className="header-title-mark">◐</span>
+            L·Compendium
           </Link>
           <nav className="header-nav">
-            <Link to="/" className="nav-link">
-              Browse
-            </Link>
-            <Link to="/upload" className="nav-link">
-              Upload
-            </Link>
+            <NavLink to="/" end className="nav-link">
+              {t("header.browse")}
+            </NavLink>
+            <a className="nav-link" href="#about">
+              {t("header.about")}
+            </a>
+            <a className="nav-link" href="#journal">
+              {t("header.journal")}
+            </a>
           </nav>
+          <div
+            className="header-lang"
+            role="group"
+            aria-label={t("header.languageLabel")}
+          >
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                className={`header-lang-btn${
+                  lang === language ? " header-lang-btn--active" : ""
+                }`}
+                onClick={() => setLanguage(lang)}
+                aria-pressed={lang === language}
+              >
+                {LANGUAGE_LABELS[lang]}
+              </button>
+            ))}
+          </div>
+          <Link to="/upload" className="header-cta">
+            {t("header.upload")} <span aria-hidden>→</span>
+          </Link>
         </div>
       </header>
       <main className="layout-main">
         <Outlet />
       </main>
+      <footer className="layout-footer">
+        <div className="footer-inner">
+          <span>© {new Date().getFullYear()} L·Compendium</span>
+          <span className="footer-tag">{t("footer.tag")}</span>
+        </div>
+      </footer>
     </div>
   );
 }

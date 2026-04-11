@@ -6,10 +6,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>L Compendium</title>
+    <title>L·Compendium</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("lcompendium.language");
+          var supported = ["en-US", "pt-BR"];
+          var lang = supported.indexOf(stored) !== -1
+            ? stored
+            : (navigator.language || "").toLowerCase().indexOf("pt") === 0
+              ? "pt-BR"
+              : "en-US";
+          document.documentElement.lang = lang;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
