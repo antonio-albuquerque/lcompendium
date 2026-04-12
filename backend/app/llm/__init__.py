@@ -17,5 +17,11 @@ def get_provider() -> LLMProvider:
         from app.llm.openai import OpenAIProvider
 
         return OpenAIProvider()
+    elif provider == "inaturalist":
+        from app.llm.inaturalist import InaturalistProvider
+
+        return InaturalistProvider()
     else:
-        raise ValueError(f"Unknown LLM provider: {provider!r}. Use 'claude' or 'openai'.")
+        raise ValueError(
+            f"Unknown LLM provider: {provider!r}. Use 'claude', 'openai', or 'inaturalist'."
+        )

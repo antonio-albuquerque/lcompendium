@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
 import { LANGUAGES, type Language } from "../i18n/translations";
 import "./Layout.css";
@@ -10,6 +11,7 @@ const LANGUAGE_LABELS: Record<Language, string> = {
 
 function Layout() {
   const { t, language, setLanguage } = useLanguage();
+  const { user, logout } = useAuth();
 
   return (
     <div className="layout">
@@ -49,9 +51,26 @@ function Layout() {
               </button>
             ))}
           </div>
-          <Link to="/upload" className="header-cta">
-            {t("header.upload")} <span aria-hidden>→</span>
-          </Link>
+          {user ? (
+            <div className="header-auth">
+              {user.is_approved && (
+                <Link to="/upload" className="header-cta">
+                  {t("header.upload")} <span aria-hidden>→</span>
+                </Link>
+              )}
+              <button
+                type="button"
+                className="header-logout"
+                onClick={logout}
+              >
+                {t("auth.logout")}
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="header-cta">
+              {t("auth.login")}
+            </Link>
+          )}
         </div>
       </header>
       <main className="layout-main">

@@ -13,8 +13,10 @@ class EntryCreate(BaseModel):
 
 class EntryResponse(BaseModel):
     id: UUID
-    species_name: str
-    description: str
+    species_name_en: str
+    species_name_pt: str
+    description_en: str
+    description_pt: str
     photo_url: str
     latitude: float | None = None
     longitude: float | None = None

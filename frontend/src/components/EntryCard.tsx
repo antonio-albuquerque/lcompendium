@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { Entry } from "../types/entry";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { useLocalized } from "../i18n/useLocalized";
 import type { Language } from "../i18n/translations";
 import "./EntryCard.css";
 
@@ -19,12 +20,13 @@ function formatDate(dateString: string, language: Language): string {
 
 function EntryCard({ entry }: EntryCardProps) {
   const { language } = useLanguage();
+  const l = useLocalized();
   return (
     <Link to={`/entries/${entry.id}`} className="entry-card">
       <div className="entry-card-image-wrapper">
         <img
           src={entry.photo_url}
-          alt={entry.species_name}
+          alt={l(entry, "species_name")}
           className="entry-card-image"
           loading="lazy"
         />
@@ -35,7 +37,7 @@ function EntryCard({ entry }: EntryCardProps) {
         </span>
       </div>
       <div className="entry-card-body">
-        <h3 className="entry-card-title">{entry.species_name}</h3>
+        <h3 className="entry-card-title">{l(entry, "species_name")}</h3>
         <span className="entry-card-arrow" aria-hidden>
           →
         </span>

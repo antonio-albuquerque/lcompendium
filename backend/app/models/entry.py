@@ -19,8 +19,10 @@ class Entry(Base):
         primary_key=True,
         server_default=text("gen_random_uuid()"),
     )
-    species_name: Mapped[str] = mapped_column(String(255), nullable=False)
-    description: Mapped[str] = mapped_column(Text, nullable=False)
+    species_name_en: Mapped[str] = mapped_column(String(255), nullable=False)
+    species_name_pt: Mapped[str] = mapped_column(String(255), nullable=False, server_default="")
+    description_en: Mapped[str] = mapped_column(Text, nullable=False)
+    description_pt: Mapped[str] = mapped_column(Text, nullable=False, server_default="")
     photo_key: Mapped[str] = mapped_column(String(512), nullable=False)
     latitude: Mapped[float | None] = mapped_column(Float, nullable=True)
     longitude: Mapped[float | None] = mapped_column(Float, nullable=True)

@@ -1,16 +1,20 @@
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { fetchEntries } from "../api/entries";
 import EntryCard from "../components/EntryCard";
 import Spinner from "../components/Spinner";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { useLocalized } from "../i18n/useLocalized";
+import heroParrot from "../assets/couleur-parrot-3417217_1920.jpg";
 import "./CompendiumPage.css";
 
 const PER_PAGE = 12;
 
 function CompendiumPage() {
   const { t, language } = useLanguage();
+  const l = useLocalized();
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError, error } = useQuery({
@@ -19,59 +23,61 @@ function CompendiumPage() {
   });
 
   const totalPages = data ? Math.ceil(data.total / data.per_page) : 0;
-  const heroImage = data?.entries[0]?.photo_url;
   const totalEntries = data?.total ?? 0;
 
   return (
     <div className="compendium-page">
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="hero-eyebrow">
-            <span className="hero-eyebrow-dot" />
-            {t("hero.eyebrow")}
-          </span>
-          <h1 className="hero-title">
-            {t("hero.titlePart1")} <em>{t("hero.titleEm")}</em>
-            <br />
-            {t("hero.titlePart2")}
-          </h1>
-          <p className="hero-subtitle">{t("hero.subtitle")}</p>
-          <div className="hero-actions">
-            <Link to="/upload" className="btn-primary hero-cta">
-              {t("hero.cta")} <span aria-hidden>→</span>
-            </Link>
-            <a href="#browse" className="hero-link">
-              {t("hero.exploreLink")}
-            </a>
+      <section
+        className="hero"
+        style={{ "--hero-bg": `url(${heroParrot})` } as CSSProperties}
+      >
+        <div className="hero-backdrop" aria-hidden />
+
+        <div className="hero-top">
+          <div className="hero-pill">
+            <span className="hero-pill-icon" aria-hidden>
+              ◐
+            </span>
+            <div className="hero-pill-text">
+              <span className="hero-pill-value">
+                {totalEntries.toLocaleString(language)}+
+              </span>
+              <span className="hero-pill-label">
+                {t("hero.statSpecies")}
+              </span>
+            </div>
           </div>
-          <dl className="hero-stats">
-            <div className="hero-stat">
-              <dt>{totalEntries.toLocaleString(language)}</dt>
-              <dd>{t("hero.statSpecies")}</dd>
-            </div>
-            <div className="hero-stat">
-              <dt>120+</dt>
-              <dd>{t("hero.statHabitats")}</dd>
-            </div>
-            <div className="hero-stat">
-              <dt>24/7</dt>
-              <dd>{t("hero.statFieldReady")}</dd>
-            </div>
-          </dl>
+          <p className="hero-intro">{t("hero.subtitle")}</p>
         </div>
 
-        <div className="hero-visual" aria-hidden="true">
-          <div className="hero-blob">
-            {heroImage ? (
-              <img src={heroImage} alt="" className="hero-image" />
-            ) : (
-              <div className="hero-placeholder">
-                <span>🕊️</span>
-              </div>
-            )}
+        <h1 className="hero-title">
+          {t("hero.titlePart1")} <em>{t("hero.titleEm")}</em>
+        </h1>
+
+        <div className="hero-bottom">
+          <div className="hero-unlock">
+            <span className="hero-unlock-kicker">
+              {t("hero.unlockKicker")}
+            </span>
+            <Link to="/upload" className="hero-sun-btn">
+              {t("hero.cta")} <span aria-hidden>→</span>
+            </Link>
           </div>
-          <div className="hero-leaf hero-leaf-1" />
-          <div className="hero-leaf hero-leaf-2" />
+          <div className="hero-featured">
+            <div className="hero-featured-col">
+              <span className="hero-featured-label">
+                {t("hero.featuredLabel")}
+              </span>
+              <span className="hero-featured-name">
+                {data?.entries[0]
+                  ? l(data.entries[0], "species_name")
+                  : t("hero.featuredNone")}
+              </span>
+            </div>
+            <a href="#browse" className="hero-featured-link">
+              {t("hero.exploreLink")} <span aria-hidden>→</span>
+            </a>
+          </div>
         </div>
       </section>
 

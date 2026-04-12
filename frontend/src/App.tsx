@@ -3,6 +3,8 @@ import Layout from "./components/Layout";
 import CompendiumPage from "./pages/CompendiumPage";
 import UploadPage from "./pages/UploadPage";
 import EntryDetailPage from "./pages/EntryDetailPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
         <Route path="/" element={<CompendiumPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/entries/:id" element={<EntryDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Route>
     </Routes>
   );

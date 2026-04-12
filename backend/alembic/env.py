@@ -14,6 +14,7 @@ from sqlalchemy import engine_from_config, pool
 from app.config import get_settings
 from app.database import Base
 from app.models.entry import Entry  # noqa: F401 — ensure model is registered
+from app.models.user import User  # noqa: F401
 
 config = context.config
 

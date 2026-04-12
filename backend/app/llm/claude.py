@@ -9,8 +9,10 @@ from app.config import get_settings
 from app.llm.base import IdentificationResult, LLMProvider
 
 PROMPT = (
-    "Identify the species in this photo. Respond with JSON: "
-    '{"species_name": "...", "description": "2-3 sentence description of the species", '
+    "Identify the species in this photo. Respond with JSON containing the species name "
+    "and a 2-3 sentence description in both English and Brazilian Portuguese:\n"
+    '{"species_name_en": "...", "species_name_pt": "...", '
+    '"description_en": "...", "description_pt": "...", '
     '"confidence": "high|medium|low"}'
 )
 
@@ -20,7 +22,14 @@ class ClaudeProvider(LLMProvider):
         settings = get_settings()
         self.client = anthropic.AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 
-    async def identify(self, image_bytes: bytes, mime_type: str) -> IdentificationResult:
+    async def identify(
+        self,
+        image_bytes: bytes,
+        mime_type: str,
+        *,
+        latitude: float | None = None,
+        longitude: float | None = None,
+    ) -> IdentificationResult:
         image_b64 = base64.standard_b64encode(image_bytes).decode("utf-8")
 
         response = await self.client.messages.create(
@@ -48,7 +57,6 @@ class ClaudeProvider(LLMProvider):
         )
 
         raw_text = response.content[0].text
-        # Extract JSON from the response (handle markdown code blocks)
         if "```" in raw_text:
             raw_text = raw_text.split("```")[1]
             if raw_text.startswith("json"):

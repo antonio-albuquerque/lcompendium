@@ -7,7 +7,9 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.deps import get_approved_user
 from app.models.entry import Entry
+from app.models.user import User
 from app.schemas.entry import EntryListResponse, EntryResponse
 from app.services import identifier, storage
 
@@ -19,8 +21,10 @@ async def _entry_to_response(entry: Entry) -> EntryResponse:
     photo_url = await storage.get_presigned_url(entry.photo_key)
     return EntryResponse(
         id=entry.id,
-        species_name=entry.species_name,
-        description=entry.description,
+        species_name_en=entry.species_name_en,
+        species_name_pt=entry.species_name_pt,
+        description_en=entry.description_en,
+        description_pt=entry.description_pt,
         photo_url=photo_url,
         latitude=entry.latitude,
         longitude=entry.longitude,
@@ -33,6 +37,7 @@ async def create_entry(
     file: UploadFile = File(...),
     latitude: float | None = Form(None),
     longitude: float | None = Form(None),
+    _current_user: User = Depends(get_approved_user),
     db: AsyncSession = Depends(get_db),
 ) -> EntryResponse:
     """Upload a photo, identify the species, and create a new entry."""
@@ -51,7 +56,9 @@ async def create_entry(
 
     # Identify species via LLM
     try:
-        result = await identifier.identify_species(file_bytes, file.content_type)
+        result = await identifier.identify_species(
+            file_bytes, file.content_type, latitude=latitude, longitude=longitude
+        )
     except Exception as exc:
         # Clean up the uploaded file if identification fails
         await storage.delete_file(photo_key)
@@ -62,8 +69,10 @@ async def create_entry(
 
     # Create database entry
     entry = Entry(
-        species_name=result.species_name,
-        description=result.description,
+        species_name_en=result.species_name_en,
+        species_name_pt=result.species_name_pt,
+        description_en=result.description_en,
+        description_pt=result.description_pt,
         photo_key=photo_key,
         latitude=latitude,
         longitude=longitude,
@@ -124,6 +133,7 @@ async def get_entry(
 @router.delete("/{entry_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_entry(
     entry_id: UUID,
+    _current_user: User = Depends(get_approved_user),
     db: AsyncSession = Depends(get_db),
 ) -> None:
     """Delete an entry and its associated S3 object."""

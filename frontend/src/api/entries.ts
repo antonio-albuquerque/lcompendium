@@ -1,9 +1,5 @@
-import axios from "axios";
+import client from "./client";
 import type { Entry, EntryListResponse } from "../types/entry";
-
-const client = axios.create({
-  baseURL: "/api",
-});
 
 export async function fetchEntries(
   page: number = 1,

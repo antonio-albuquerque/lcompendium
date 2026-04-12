@@ -3,7 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchEntry, deleteEntry } from "../api/entries";
 import Spinner from "../components/Spinner";
+import { useAuth } from "../auth/AuthProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
+import { useLocalized } from "../i18n/useLocalized";
 import type { Language } from "../i18n/translations";
 import "./EntryDetailPage.css";
 
@@ -19,7 +21,9 @@ function formatDate(dateString: string, language: Language): string {
 }
 
 function EntryDetailPage() {
+  const { user } = useAuth();
   const { t, language } = useLanguage();
+  const l = useLocalized();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -92,16 +96,16 @@ function EntryDetailPage() {
         <div className="detail-photo-wrapper">
           <img
             src={entry.photo_url}
-            alt={entry.species_name}
+            alt={l(entry, "species_name")}
             className="detail-photo"
           />
         </div>
 
         <div className="detail-info">
           <span className="detail-eyebrow">{t("detail.eyebrow")}</span>
-          <h1 className="detail-species">{entry.species_name}</h1>
+          <h1 className="detail-species">{l(entry, "species_name")}</h1>
 
-          <p className="detail-description">{entry.description}</p>
+          <p className="detail-description">{l(entry, "description")}</p>
 
           <div className="detail-meta">
             {entry.latitude !== null && entry.longitude !== null && (
@@ -125,28 +129,32 @@ function EntryDetailPage() {
             </div>
           </div>
 
-          <div className="detail-actions">
-            <button
-              type="button"
-              className="btn-danger"
-              onClick={handleDelete}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending
-                ? t("detail.deleting")
-                : t("detail.delete")}
-            </button>
-          </div>
+          {user?.is_approved && (
+            <>
+              <div className="detail-actions">
+                <button
+                  type="button"
+                  className="btn-danger"
+                  onClick={handleDelete}
+                  disabled={deleteMutation.isPending}
+                >
+                  {deleteMutation.isPending
+                    ? t("detail.deleting")
+                    : t("detail.delete")}
+                </button>
+              </div>
 
-          {deleteMutation.isError && (
-            <div className="detail-delete-error">
-              {t("detail.deleteError", {
-                message:
-                  deleteMutation.error instanceof Error
-                    ? deleteMutation.error.message
-                    : t("common.unknownError"),
-              })}
-            </div>
+              {deleteMutation.isError && (
+                <div className="detail-delete-error">
+                  {t("detail.deleteError", {
+                    message:
+                      deleteMutation.error instanceof Error
+                        ? deleteMutation.error.message
+                        : t("common.unknownError"),
+                  })}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

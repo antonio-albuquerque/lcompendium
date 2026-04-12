@@ -16,9 +16,22 @@ class Settings(BaseSettings):
     S3_PUBLIC_URL: str = "http://localhost:9000"
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
+    INATURALIST_API_TOKEN: str = ""
     LLM_PROVIDER: str = "claude"
 
+    SECRET_KEY: str = "change-me-in-production"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
+    ALGORITHM: str = "HS256"
+
     model_config = {"env_file": ".env"}
+
+    def model_post_init(self, __context: object) -> None:
+        if self.DATABASE_URL.startswith("postgresql://"):
+            object.__setattr__(
+                self,
+                "DATABASE_URL",
+                self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1),
+            )
 
 
 @lru_cache

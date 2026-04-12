@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
+import { AuthProvider } from "./auth/AuthProvider";
 import { LanguageProvider } from "./i18n/LanguageProvider";
 import "./index.css";
 
@@ -23,11 +24,13 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </LanguageProvider>
+      <AuthProvider>
+        <LanguageProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </LanguageProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

@@ -1,15 +1,35 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEntry } from "../api/entries";
 import PhotoUploader from "../components/PhotoUploader";
 import LocationPicker from "../components/LocationPicker";
+import Spinner from "../components/Spinner";
+import { useAuth } from "../auth/AuthProvider";
 import { useLanguage } from "../i18n/LanguageProvider";
 import "./UploadPage.css";
 
 function UploadPage() {
   const { t } = useLanguage();
+  const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, authLoading, navigate]);
+
+  if (authLoading || !user) return <Spinner />;
+
+  if (!user.is_approved) {
+    return (
+      <div className="upload-page">
+        <span className="upload-eyebrow">{t("auth.pendingApprovalTitle")}</span>
+        <p className="upload-subheading">{t("auth.pendingApproval")}</p>
+      </div>
+    );
+  }
   const queryClient = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
   const [location, setLocation] = useState<{
