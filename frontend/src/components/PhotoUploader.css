@@ -18,6 +18,7 @@
   transition: border-color 0.2s ease, background-color 0.2s ease;
   position: relative;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .upload-zone:hover {
@@ -87,4 +88,27 @@
   max-height: 400px;
   object-fit: contain;
   display: block;
+}
+
+@media (max-width: 600px) {
+  .photo-uploader {
+    align-items: stretch;
+  }
+  .upload-zone {
+    min-height: 220px;
+  }
+  .upload-placeholder {
+    padding: 1.25rem;
+  }
+  .upload-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 2rem;
+  }
+  .upload-text {
+    font-size: 0.9rem;
+  }
+  .photo-uploader .btn-secondary {
+    width: 100%;
+  }
 }

@@ -82,3 +82,23 @@
 .auth-switch a:hover {
   color: var(--color-forest-deep);
 }
+
+.auth-input {
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .auth-page {
+    padding-top: 0.5rem;
+  }
+  .auth-heading {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .auth-form {
+    gap: 1rem;
+  }
+  .auth-submit {
+    width: 100%;
+  }
+}

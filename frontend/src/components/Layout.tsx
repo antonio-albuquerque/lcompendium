@@ -55,7 +55,10 @@ function Layout() {
             <div className="header-auth">
               {user.is_approved && (
                 <Link to="/upload" className="header-cta">
-                  {t("header.upload")} <span aria-hidden>→</span>
+                  {t("header.upload")}{" "}
+                  <span aria-hidden className="header-cta-arrow">
+                    →
+                  </span>
                 </Link>
               )}
               <button
