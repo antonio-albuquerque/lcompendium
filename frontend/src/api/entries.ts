@@ -5,7 +5,7 @@ export async function fetchEntries(
   page: number = 1,
   perPage: number = 12,
 ): Promise<EntryListResponse> {
-  const response = await client.get<EntryListResponse>("/entries", {
+  const response = await client.get<EntryListResponse>("/entries/", {
     params: { page, per_page: perPage },
   });
   return response.data;
@@ -27,7 +27,7 @@ export async function createEntry(
     formData.append("latitude", String(latitude));
     formData.append("longitude", String(longitude));
   }
-  const response = await client.post<Entry>("/entries", formData, {
+  const response = await client.post<Entry>("/entries/", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;
