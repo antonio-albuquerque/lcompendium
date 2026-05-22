@@ -7,6 +7,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.types import Scope
 
 from app.database import Base, engine
 from app.models.entry import Entry  # noqa: F401 — ensure model is registered
@@ -43,5 +45,17 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+class SPAStaticFiles(StaticFiles):
+    """Static files with SPA fallback: serve index.html for unknown paths."""
+
+    async def get_response(self, path: str, scope: Scope):
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            if exc.status_code == 404:
+                return await super().get_response("index.html", scope)
+            raise
+
+
 if STATIC_DIR.is_dir():
-    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="spa")
+    app.mount("/", SPAStaticFiles(directory=STATIC_DIR, html=True), name="spa")
